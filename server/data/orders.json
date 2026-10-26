@@ -1,0 +1,128 @@
+[
+  {
+    "id": "ORD-795918",
+    "createdAt": "2026-10-26T18:25:20.404Z",
+    "status": "received",
+    "deliveryTimeEst": "10 mins",
+    "items": [
+      {
+        "id": "p22",
+        "name": "India Gate Basmati Rice Feast Rozzana",
+        "price": 420,
+        "quantity": 1,
+        "unit": "5 kg",
+        "image": "https://images.unsplash.com/photo-1586201375761-83865001e31c?w=400&auto=format&fit=crop&q=80"
+      }
+    ],
+    "subtotal": 420,
+    "deliveryFee": 0,
+    "handlingFee": 4,
+    "tip": 0,
+    "discount": 0,
+    "couponCode": null,
+    "total": 424,
+    "address": {
+      "id": "addr-1",
+      "tag": "Home",
+      "recipient": "Vishwa V",
+      "phone": "+91 98450 12345",
+      "flat": "Flat 402, Green Glen Palms",
+      "area": "Bellandur, Outer Ring Road",
+      "city": "Bengaluru",
+      "pincode": "560103",
+      "eta": "8-10 MINS"
+    },
+    "paymentMethod": "UPI (Google Pay / PhonePe / QR)",
+    "rider": {
+      "name": "Ramesh Kumar",
+      "phone": "+91 98765 43210",
+      "rating": 4.9,
+      "vehicle": "Hero Electric (KA-03-EB-2024)"
+    }
+  },
+  {
+    "id": "ORD-660254",
+    "createdAt": "2026-10-26T18:15:59.375Z",
+    "status": "delivered",
+    "deliveryTimeEst": "10 mins",
+    "items": [
+      {
+        "id": "p2",
+        "name": "Fresh Farm Potato (Aloo)",
+        "price": 32,
+        "quantity": 1,
+        "unit": "1 kg",
+        "image": "https://images.unsplash.com/photo-1518977676601-b53f82aba655?w=400&auto=format&fit=crop&q=80"
+      }
+    ],
+    "subtotal": 32,
+    "deliveryFee": 25,
+    "handlingFee": 4,
+    "tip": 0,
+    "discount": 0,
+    "couponCode": null,
+    "total": 61,
+    "address": {
+      "id": "addr-1",
+      "tag": "Home",
+      "recipient": "Vishwa V",
+      "phone": "+91 98450 12345",
+      "flat": "Flat 402, Green Glen Palms",
+      "area": "Bellandur, Outer Ring Road",
+      "city": "Bengaluru",
+      "pincode": "560103",
+      "eta": "8-10 MINS"
+    },
+    "paymentMethod": "UPI (Instant Quick-Pay)",
+    "rider": {
+      "name": "Ramesh Kumar",
+      "phone": "+91 98765 43210",
+      "rating": 4.9,
+      "vehicle": "Hero Electric (KA-03-EB-2024)"
+    }
+  },
+  {
+    "id": "ORD-82910",
+    "createdAt": "2026-10-26T22:45:00.000Z",
+    "status": "delivered",
+    "deliveryTimeEst": "11 mins",
+    "items": [
+      {
+        "id": "p6",
+        "name": "Amul Taaza Homogenised Toned Milk",
+        "price": 54,
+        "quantity": 2,
+        "unit": "1 L",
+        "image": "https://images.unsplash.com/photo-1550583724-b2692b85b150?w=400&auto=format&fit=crop&q=80"
+      },
+      {
+        "id": "p10",
+        "name": "Modern 100% Whole Wheat Brown Bread",
+        "price": 50,
+        "quantity": 1,
+        "unit": "400 g",
+        "image": "https://images.unsplash.com/photo-1509440159596-0249088772ff?w=400&auto=format&fit=crop&q=80"
+      }
+    ],
+    "subtotal": 158,
+    "deliveryFee": 0,
+    "handlingFee": 4,
+    "tip": 10,
+    "discount": 0,
+    "total": 172,
+    "address": {
+      "tag": "Home",
+      "flat": "Flat 402, Green Glen Palms",
+      "area": "Bellandur, Outer Ring Road",
+      "city": "Bengaluru",
+      "pincode": "560103"
+    },
+    "paymentMethod": "UPI (Google Pay)",
+    "rider": {
+      "name": "Ramesh Kumar",
+      "phone": "+91 98765 43210",
+      "rating": 4.9,
+      "vehicle": "Electric Scooter (KA-03-EB-2024)"
+    }
+  }
+]

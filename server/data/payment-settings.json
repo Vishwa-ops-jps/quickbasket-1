@@ -1,0 +1,24 @@
+{
+  "upi": {
+    "enabled": true,
+    "vpa": "quickbasket@icici",
+    "payeeName": "QuickBasket Delivery Hub",
+    "enableQr": true,
+    "enableIntent": true,
+    "soundboxAlert": true
+  },
+  "razorpay": {
+    "enabled": true,
+    "mode": "test",
+    "keyId": "rzp_test_9kM38d1P90Fk2L",
+    "keySecret": "••••••••••••••••••••••••",
+    "webhookSecret": "whsec_quickbasket2026",
+    "acceptedMethods": ["cards", "netbanking", "wallets", "upi"]
+  },
+  "cod": {
+    "enabled": true,
+    "maxLimit": 2500,
+    "extraFee": 0
+  }
+}
+

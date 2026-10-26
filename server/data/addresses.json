@@ -1,0 +1,25 @@
+[
+  {
+    "id": "addr-1",
+    "tag": "Home",
+    "recipient": "Vishwa V",
+    "phone": "+91 98450 12345",
+    "flat": "Flat 402, Green Glen Palms",
+    "area": "Bellandur, Outer Ring Road",
+    "city": "Bengaluru",
+    "pincode": "560103",
+    "eta": "8-10 MINS"
+  },
+  {
+    "id": "addr-2",
+    "tag": "Office",
+    "recipient": "Vishwa V",
+    "phone": "+91 98450 12345",
+    "flat": "Tower B, 7th Floor, RMZ Ecospace",
+    "area": "Sarjapur Road",
+    "city": "Bengaluru",
+    "pincode": "560103",
+    "eta": "11-13 MINS"
+  }
+]
+

@@ -1,0 +1,24 @@
+[
+  {
+    "code": "WELCOME50",
+    "discountPercent": 20,
+    "maxDiscount": 50,
+    "minOrder": 199,
+    "description": "20% OFF up to ₹50 on first order"
+  },
+  {
+    "code": "SUPER100",
+    "discountPercent": 15,
+    "maxDiscount": 100,
+    "minOrder": 499,
+    "description": "15% OFF up to ₹100 on orders above ₹499"
+  },
+  {
+    "code": "FREESHIP",
+    "freeDelivery": true,
+    "discountAmount": 25,
+    "minOrder": 149,
+    "description": "Free Delivery on orders above ₹149"
+  }
+]
+

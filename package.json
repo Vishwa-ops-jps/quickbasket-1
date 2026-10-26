@@ -1,0 +1,14 @@
+{
+  "name": "quickbasket",
+  "version": "1.0.0",
+  "description": "Full-stack 10-minute grocery delivery app with React, Vite, Tailwind CSS and Express.js",
+  "scripts": {
+    "server": "cd server && npm start",
+    "client": "cd client && npm run dev",
+    "build": "cd client && npm run build"
+  },
+  "keywords": ["blinkit", "bigbasket", "quick-commerce", "react", "express", "grocery-delivery"],
+  "author": "",
+  "license": "ISC"
+}
+
