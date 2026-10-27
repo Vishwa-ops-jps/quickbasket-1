@@ -1,37 +1,5 @@
 [
   {
-    "id": "p1793039357666",
-    "name": "hi",
-    "brand": "hi",
-    "category": "veg-fruits",
-    "unit": "1 kg",
-    "price": 100,
-    "mrp": 150,
-    "rating": 4.8,
-    "reviewsCount": 1,
-    "deliveryTime": "10 mins",
-    "image": "https://images.unsplash.com/photo-1542838132-92c53300491e?w=400&auto=format&fit=crop&q=80",
-    "inStock": true,
-    "stock": 50,
-    "description": ""
-  },
-  {
-    "id": "p1",
-    "name": "Fresh Hybrid Tomato",
-    "brand": "Farm Fresh",
-    "category": "veg-fruits",
-    "unit": "1 kg",
-    "price": 38,
-    "mrp": 55,
-    "rating": 4.7,
-    "reviewsCount": 2400,
-    "deliveryTime": "8 mins",
-    "image": "https://images.unsplash.com/photo-1592924357228-91a4daadcfea?w=400&auto=format&fit=crop&q=80",
-    "inStock": true,
-    "stock": 45,
-    "description": "Plump, juicy, farm-picked tomatoes ideal for curries, salads, and gravies."
-  },
-  {
     "id": "p2",
     "name": "Fresh Farm Potato (Aloo)",
     "brand": "Farm Fresh",

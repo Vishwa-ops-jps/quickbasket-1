@@ -1,14 +1,18 @@
 {
-  "name": "blinkit-backend",
+  "name": "quickbasket-server",
   "version": "1.0.0",
-  "description": "Express.js REST API for Blinkit / BigBasket Clone",
+  "description": "Express.js REST API with MySQL for QuickBasket (Blinkit & BigBasket clone)",
   "main": "server.js",
   "scripts": {
     "start": "node server.js",
-    "dev": "node server.js"
+    "dev": "node server.js",
+    "db:init": "node init-db.js"
   },
   "dependencies": {
     "cors": "^2.8.5",
-    "express": "^4.19.2"
+    "dotenv": "^18.0.9",
+    "express": "^4.19.2",
+    "mysql2": "^3.24.6",
+    "razorpay": "^2.9.8"
   }
 }

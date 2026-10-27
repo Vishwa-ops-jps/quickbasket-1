@@ -2,18 +2,29 @@ import React, { useState, useEffect } from 'react';
 import { 
   Package, Plus, Trash2, Edit3, Save, X, CheckCircle, 
   Layers, ShoppingBag, TrendingUp, AlertTriangle, CreditCard, 
-  QrCode, Smartphone, Check, ShieldCheck, Key, Lock, Eye, EyeOff, Radio
+  QrCode, Smartphone, Check, ShieldCheck, Key, Lock, Eye, EyeOff, Radio,
+  Database, RefreshCw, Server, Terminal, ExternalLink
 } from 'lucide-react';
 
 export default function AdminPanel({ onProductUpdated }) {
   const [products, setProducts] = useState([]);
   const [categories, setCategories] = useState([]);
   const [orders, setOrders] = useState([]);
-  const [activeTab, setActiveTab] = useState('products'); // 'products', 'orders', 'payments'
+  const [activeTab, setActiveTab] = useState('products'); // 'products', 'orders', 'payments', 'database'
   const [showAddModal, setShowAddModal] = useState(false);
   const [editingId, setEditingId] = useState(null);
   const [editPrice, setEditPrice] = useState('');
   const [editStock, setEditStock] = useState('');
+  const [dbStatus, setDbStatus] = useState({
+    connected: false,
+    mode: 'checking',
+    host: 'localhost',
+    port: 3306,
+    database: 'quickbasket_db',
+    counts: { products: 0, categories: 0, orders: 0 }
+  });
+  const [isReconnectingDb, setIsReconnectingDb] = useState(false);
+  const [dbReconnectMsg, setDbReconnectMsg] = useState(null);
 
   // Payment settings state
   const [paymentSettings, setPaymentSettings] = useState({
@@ -77,6 +88,36 @@ export default function AdminPanel({ onProductUpdated }) {
         }
       })
       .catch(err => console.error(err));
+
+    fetch('/api/db/status')
+      .then(res => res.json())
+      .then(data => {
+        if (data) setDbStatus(data);
+      })
+      .catch(err => console.error(err));
+  };
+
+  const handleReconnectDb = async () => {
+    setIsReconnectingDb(true);
+    setDbReconnectMsg(null);
+    try {
+      const res = await fetch('/api/db/reconnect', { method: 'POST' });
+      const data = await res.json();
+      if (data.status) {
+        setDbStatus(data.status);
+      }
+      if (data.success) {
+        setDbReconnectMsg({ type: 'success', text: 'Connected to MySQL successfully!' });
+      } else {
+        setDbReconnectMsg({ type: 'warning', text: 'MySQL server not responding. Using local JSON store.' });
+      }
+      fetchData();
+    } catch (err) {
+      setDbReconnectMsg({ type: 'error', text: 'Failed to reconnect: ' + err.message });
+    } finally {
+      setIsReconnectingDb(false);
+      setTimeout(() => setDbReconnectMsg(null), 5000);
+    }
   };
 
   useEffect(() => {
@@ -235,6 +276,19 @@ export default function AdminPanel({ onProductUpdated }) {
             <span>Payments (UPI & Razorpay)</span>
           </button>
 
+          <button
+            onClick={() => setActiveTab('database')}
+            className={`flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-xs font-bold transition-all ${
+              activeTab === 'database'
+                ? 'bg-[#0c831f] text-white shadow-sm'
+                : 'bg-white border border-gray-200 text-gray-700'
+            }`}
+          >
+            <Database className="w-3.5 h-3.5" />
+            <span>MySQL Database</span>
+            <span className={`w-2 h-2 rounded-full ${dbStatus.connected ? 'bg-emerald-400' : 'bg-amber-400'}`} />
+          </button>
+
           {activeTab === 'products' && (
             <button
               onClick={() => setShowAddModal(true)}
@@ -244,6 +298,58 @@ export default function AdminPanel({ onProductUpdated }) {
               <span>Add Item</span>
             </button>
           )}
+        </div>
+      </div>
+
+      {/* Database Connection Status Bar */}
+      <div className={`mb-6 p-4 rounded-2xl border transition-all flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs ${
+        dbStatus.connected 
+          ? 'bg-emerald-50/80 border-emerald-200 text-emerald-900' 
+          : 'bg-amber-50/90 border-amber-200 text-amber-900'
+      }`}>
+        <div className="flex items-center gap-3">
+          <div className={`w-8 h-8 rounded-xl flex items-center justify-center font-black ${
+            dbStatus.connected ? 'bg-emerald-600 text-white' : 'bg-amber-500 text-white'
+          }`}>
+            <Database className="w-4 h-4" />
+          </div>
+          <div>
+            <div className="flex items-center gap-2">
+              <span className="font-black text-sm">
+                {dbStatus.connected ? 'MySQL Database Connected' : 'Local Data Engine Active (MySQL Ready)'}
+              </span>
+              <span className={`px-2 py-0.5 rounded-full text-[10px] font-black uppercase tracking-wider ${
+                dbStatus.connected ? 'bg-emerald-200 text-emerald-800' : 'bg-amber-200 text-amber-900'
+              }`}>
+                {dbStatus.connected ? 'MySQL 8.0' : 'JSON Sync Store'}
+              </span>
+            </div>
+            <p className="text-[11px] opacity-80 mt-0.5">
+              {dbStatus.connected 
+                ? `Connected to MySQL: ${dbStatus.host}:${dbStatus.port} / ${dbStatus.database} • Tables loaded & synched`
+                : `Express is persisting data smoothly with zero downtime. Connect to MySQL (${dbStatus.host}:${dbStatus.port}/${dbStatus.database}) anytime.`}
+            </p>
+          </div>
+        </div>
+
+        <div className="flex items-center gap-2 self-end sm:self-auto">
+          {dbReconnectMsg && (
+            <span className={`text-[11px] font-bold ${dbReconnectMsg.type === 'success' ? 'text-emerald-700' : 'text-amber-800'}`}>
+              {dbReconnectMsg.text}
+            </span>
+          )}
+          <button
+            onClick={handleReconnectDb}
+            disabled={isReconnectingDb}
+            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl font-bold shadow-sm transition-all ${
+              dbStatus.connected
+                ? 'bg-white border border-emerald-300 text-emerald-800 hover:bg-emerald-100'
+                : 'bg-amber-500 hover:bg-amber-600 text-white'
+            }`}
+          >
+            <RefreshCw className={`w-3.5 h-3.5 ${isReconnectingDb ? 'animate-spin' : ''}`} />
+            <span>{isReconnectingDb ? 'Connecting...' : (dbStatus.connected ? 'Refresh DB' : 'Connect MySQL')}</span>
+          </button>
         </div>
       </div>
 
@@ -713,6 +819,182 @@ export default function AdminPanel({ onProductUpdated }) {
               </div>
             </div>
           ))}
+        </div>
+      )}
+
+      {/* ================= DATABASE & MYSQL CONFIG TAB ================= */}
+      {activeTab === 'database' && (
+        <div className="space-y-6 animate-in fade-in duration-200">
+          
+          {/* Top Status Banner */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            
+            <div className="bg-white p-5 rounded-3xl border border-gray-200 shadow-sm flex items-center gap-4">
+              <div className={`w-12 h-12 rounded-2xl flex items-center justify-center font-black ${
+                dbStatus.connected ? 'bg-emerald-100 text-emerald-700' : 'bg-amber-100 text-amber-700'
+              }`}>
+                <Database className="w-6 h-6" />
+              </div>
+              <div>
+                <p className="text-[11px] font-bold text-gray-400 uppercase tracking-wider">Database Status</p>
+                <h4 className="text-base font-black text-gray-900">
+                  {dbStatus.connected ? 'MySQL Connected' : 'Local Active Store'}
+                </h4>
+                <p className="text-[11px] font-semibold text-gray-500">
+                  {dbStatus.connected ? 'Online on port ' + dbStatus.port : 'Zero downtime fallback'}
+                </p>
+              </div>
+            </div>
+
+            <div className="bg-white p-5 rounded-3xl border border-gray-200 shadow-sm flex items-center gap-4">
+              <div className="w-12 h-12 rounded-2xl bg-blue-50 text-blue-600 flex items-center justify-center font-black">
+                <Server className="w-6 h-6" />
+              </div>
+              <div>
+                <p className="text-[11px] font-bold text-gray-400 uppercase tracking-wider">Target Schema</p>
+                <h4 className="text-base font-black text-gray-900">{dbStatus.database}</h4>
+                <p className="text-[11px] font-semibold text-gray-500">{dbStatus.host}:{dbStatus.port}</p>
+              </div>
+            </div>
+
+            <div className="bg-white p-5 rounded-3xl border border-gray-200 shadow-sm flex items-center gap-4">
+              <div className="w-12 h-12 rounded-2xl bg-purple-50 text-purple-600 flex items-center justify-center font-black">
+                <Layers className="w-6 h-6" />
+              </div>
+              <div>
+                <p className="text-[11px] font-bold text-gray-400 uppercase tracking-wider">Managed Entities</p>
+                <h4 className="text-base font-black text-gray-900">{products.length} Products</h4>
+                <p className="text-[11px] font-semibold text-gray-500">{categories.length} Categories • {orders.length} Orders</p>
+              </div>
+            </div>
+
+          </div>
+
+          {/* Database Details & Tables */}
+          <div className="bg-white rounded-3xl border border-gray-200 p-6 shadow-sm space-y-6">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between pb-4 border-b border-gray-100 gap-3">
+              <div>
+                <h3 className="text-base font-black text-gray-900 flex items-center gap-2">
+                  <span>MySQL Database Architecture</span>
+                  <span className="bg-blue-100 text-blue-800 text-[10px] font-black uppercase px-2 py-0.5 rounded">
+                    Relational Schema
+                  </span>
+                </h3>
+                <p className="text-xs text-gray-500">
+                  Powered by mysql2/promise connection pooling, auto-migrations, and fallback sync
+                </p>
+              </div>
+
+              <button
+                onClick={handleReconnectDb}
+                disabled={isReconnectingDb}
+                className="flex items-center gap-2 bg-[#0c831f] hover:bg-[#086317] text-white px-4 py-2 rounded-xl text-xs font-black shadow-sm transition-all"
+              >
+                <RefreshCw className={`w-4 h-4 ${isReconnectingDb ? 'animate-spin' : ''}`} />
+                <span>{isReconnectingDb ? 'Testing MySQL...' : 'Test / Reconnect Database'}</span>
+              </button>
+            </div>
+
+            {/* Tables Grid */}
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+              
+              <div className="p-4 rounded-2xl bg-gray-50 border border-gray-200 space-y-2">
+                <div className="flex items-center justify-between">
+                  <span className="font-black text-gray-900 text-xs font-mono">`products`</span>
+                  <span className="bg-emerald-100 text-emerald-800 font-bold text-[10px] px-2 py-0.5 rounded-full">
+                    {products.length} rows
+                  </span>
+                </div>
+                <p className="text-[11px] text-gray-500">
+                  id, name, brand, category, unit, price, mrp, rating, reviewsCount, deliveryTime, image, inStock, stock, description
+                </p>
+              </div>
+
+              <div className="p-4 rounded-2xl bg-gray-50 border border-gray-200 space-y-2">
+                <div className="flex items-center justify-between">
+                  <span className="font-black text-gray-900 text-xs font-mono">`categories`</span>
+                  <span className="bg-emerald-100 text-emerald-800 font-bold text-[10px] px-2 py-0.5 rounded-full">
+                    {categories.length} rows
+                  </span>
+                </div>
+                <p className="text-[11px] text-gray-500">
+                  id, name, icon, image, itemCount
+                </p>
+              </div>
+
+              <div className="p-4 rounded-2xl bg-gray-50 border border-gray-200 space-y-2">
+                <div className="flex items-center justify-between">
+                  <span className="font-black text-gray-900 text-xs font-mono">`orders`</span>
+                  <span className="bg-emerald-100 text-emerald-800 font-bold text-[10px] px-2 py-0.5 rounded-full">
+                    {orders.length} rows
+                  </span>
+                </div>
+                <p className="text-[11px] text-gray-500">
+                  id, createdAt, status, total, address, paymentMethod, paymentStatus, paymentDetails, rider, items
+                </p>
+              </div>
+
+              <div className="p-4 rounded-2xl bg-gray-50 border border-gray-200 space-y-2">
+                <div className="flex items-center justify-between">
+                  <span className="font-black text-gray-900 text-xs font-mono">`payment_settings`</span>
+                  <span className="bg-blue-100 text-blue-800 font-bold text-[10px] px-2 py-0.5 rounded-full">
+                    1 row
+                  </span>
+                </div>
+                <p className="text-[11px] text-gray-500">
+                  id, settings_json (UPI VPA, Razorpay credentials, COD limits)
+                </p>
+              </div>
+
+              <div className="p-4 rounded-2xl bg-gray-50 border border-gray-200 space-y-2">
+                <div className="flex items-center justify-between">
+                  <span className="font-black text-gray-900 text-xs font-mono">`coupons`</span>
+                  <span className="bg-blue-100 text-blue-800 font-bold text-[10px] px-2 py-0.5 rounded-full">
+                    4 codes
+                  </span>
+                </div>
+                <p className="text-[11px] text-gray-500">
+                  id, code, description, discountPercent, maxDiscount, minOrder, freeDelivery
+                </p>
+              </div>
+
+              <div className="p-4 rounded-2xl bg-gray-50 border border-gray-200 space-y-2">
+                <div className="flex items-center justify-between">
+                  <span className="font-black text-gray-900 text-xs font-mono">`addresses`</span>
+                  <span className="bg-blue-100 text-blue-800 font-bold text-[10px] px-2 py-0.5 rounded-full">
+                    Active
+                  </span>
+                </div>
+                <p className="text-[11px] text-gray-500">
+                  id, tag, recipient, phone, flat, area, city, pincode, eta
+                </p>
+              </div>
+
+            </div>
+
+            {/* Quick Setup Instructions */}
+            <div className="p-5 rounded-2xl bg-slate-900 text-slate-100 space-y-3">
+              <div className="flex items-center gap-2">
+                <Terminal className="w-4 h-4 text-emerald-400" />
+                <span className="font-bold text-xs uppercase tracking-wider text-emerald-400">
+                  Quick MySQL Commands & Connection Info
+                </span>
+              </div>
+              <p className="text-xs text-slate-300">
+                To connect QuickBasket directly to your local MySQL database:
+              </p>
+              <div className="bg-slate-950 p-3 rounded-xl font-mono text-[11px] text-slate-200 space-y-1">
+                <div className="text-gray-400"># 1. Ensure MySQL service is running:</div>
+                <div className="text-emerald-300">net start MySQL80  (or start via XAMPP / Windows Services)</div>
+                <div className="text-gray-400 mt-2"># 2. Configure credentials in server/.env:</div>
+                <div>DB_HOST=localhost | DB_PORT=3306 | DB_USER=root | DB_PASSWORD=your_password</div>
+                <div className="text-gray-400 mt-2"># 3. Run auto-migration & initial seed:</div>
+                <div className="text-emerald-300">cd server && npm run db:init</div>
+              </div>
+            </div>
+
+          </div>
+
         </div>
       )}
 

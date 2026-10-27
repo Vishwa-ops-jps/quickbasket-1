@@ -1,14 +1,29 @@
 {
   "name": "quickbasket",
   "version": "1.0.0",
-  "description": "Full-stack 10-minute grocery delivery app with React, Vite, Tailwind CSS and Express.js",
+  "description": "Full-stack 10-minute grocery delivery app like Blinkit & BigBasket with React, Express, MySQL, Admin Product Management, UPI & Razorpay",
+  "main": "server/server.js",
   "scripts": {
+    "start": "node server/server.js",
+    "dev": "node server/server.js",
+    "db:init": "cd server && npm run db:init",
     "server": "cd server && npm start",
     "client": "cd client && npm run dev",
-    "build": "cd client && npm run build"
+    "build": "npm run render-build",
+    "render-build": "npm install --prefix server && npm install --prefix client && npm run build --prefix client"
   },
-  "keywords": ["blinkit", "bigbasket", "quick-commerce", "react", "express", "grocery-delivery"],
+  "keywords": [
+    "quickbasket",
+    "blinkit",
+    "bigbasket",
+    "quick-commerce",
+    "react",
+    "express",
+    "mysql",
+    "razorpay",
+    "upi",
+    "grocery-delivery"
+  ],
   "author": "",
   "license": "ISC"
 }
-
