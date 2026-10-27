@@ -439,13 +439,16 @@ app.post('/api/payment/verify-upi', (req, res) => {
 // Serve static frontend assets in production (Render / Production build)
 const clientDist = path.join(__dirname, '..', 'client', 'dist');
 if (fs.existsSync(clientDist)) {
+  console.log(`📦 Serving compiled React frontend from: ${clientDist}`);
   app.use(express.static(clientDist));
   app.get('*', (req, res, next) => {
     if (req.path.startsWith('/api')) return next();
     res.sendFile(path.join(clientDist, 'index.html'));
   });
+} else {
+  console.log(`⚠️ Client dist not found at ${clientDist}. Running in API-only mode.`);
 }
 
-app.listen(PORT, () => {
-  console.log(`🚀 QuickBasket Express Server is running on http://localhost:${PORT}`);
+app.listen(PORT, '0.0.0.0', () => {
+  console.log(`🚀 QuickBasket Full-Stack Server is running on port ${PORT}`);
 });

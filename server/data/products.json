@@ -1,5 +1,21 @@
 [
   {
+    "id": "p1793099729660",
+    "name": "hi",
+    "brand": "hi",
+    "category": "dairy-eggs",
+    "unit": "1 kg",
+    "price": 1,
+    "mrp": 1,
+    "rating": 4.8,
+    "reviewsCount": 1,
+    "deliveryTime": "10 mins",
+    "image": "\"C:\\Users\\Vishwa.V\\OneDrive\\Music\\Playlists\\Pictures\\Screenshots\\Screenshot 2026-10-05 171309.png\"",
+    "inStock": true,
+    "stock": 50,
+    "description": ""
+  },
+  {
     "id": "p2",
     "name": "Fresh Farm Potato (Aloo)",
     "brand": "Farm Fresh",
